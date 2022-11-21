@@ -1,28 +1,32 @@
-﻿int inc;
-int fin;
-bool ok,ok1,ok2;
+﻿int rangeStart;
+
+static bool ReadIntValue(out int rangeStart, string intValueDescription)
+{
+    Console.WriteLine(intValueDescription);
+    string i = Console.ReadLine();
+    return Int32.TryParse(i, out rangeStart);
+}
+
+int rangeEnd;
+bool isRangeValid;
 do
 {
-    ok = true;
-    string i = Console.ReadLine();
-    //int inc;
-    ok1=Int32.TryParse(i, out inc);
+    isRangeValid = true;
 
-    string f = Console.ReadLine();
-    //int fin;
-    ok2=Int32.TryParse(f, out fin);
+    var ok1=ReadIntValue(out rangeStart, "Inceputul intervalului:");
 
-    if (inc >= fin || ok1==false || ok2==false)
+    var ok2 = ReadIntValue(out rangeEnd, "Sfarsitul intervalului:");
+
+    if (rangeStart >= rangeEnd || ok1 == false || ok2 == false)
     {
-        ok = false;
+        isRangeValid = false;
         Console.WriteLine("Interval introdus gresit! Incearca din nou.");
     }
-} while (ok == false);
+} while (isRangeValid == false);
 
 Random r = new Random();
 int nr = new();
-nr = r.Next(inc, fin);
-//Console.WriteLine(nr);
+nr = r.Next(rangeStart, rangeEnd);
 
 bool guess = false;
 do
@@ -37,7 +41,7 @@ do
         continue;
     }
     else
-    if (user > fin || user < inc && usr==false)
+    if (user > rangeEnd || user < rangeStart && usr==false)
         Console.WriteLine("Valoarea "+user+" nu se afla in interval!");
     else
         if (nr == user)
