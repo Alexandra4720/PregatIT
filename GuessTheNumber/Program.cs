@@ -1,57 +1,94 @@
 ﻿int rangeStart;
+int rangeEnd = 0;
+int userValue;
 
-static bool ReadIntValue(out int rangeStart, string intValueDescription)
+static bool ValidateRangeLimitValues(int rangeStart, int rangeEnd)
 {
-    Console.WriteLine(intValueDescription);
-    string i = Console.ReadLine();
-    return Int32.TryParse(i, out rangeStart);
+    return rangeStart <= rangeEnd;
 }
 
-int rangeEnd;
+string ReadValue(string valueDescription)
+{
+    Console.WriteLine(valueDescription);
+    return Console.ReadLine();
+}
+
+static bool ValidateEquality(int randomNumber, int userValue)
+{
+    return randomNumber == userValue;
+}
+
+bool isInRange(int userValue)
+{
+    return (userValue <= rangeEnd) && (userValue >= rangeStart);
+}
+
+bool ValidateInequality(int randomNumber)
+{
+    return userValue > randomNumber;
+}
+
+
+
 bool isRangeValid;
 do
 {
     isRangeValid = true;
 
-    var ok1=ReadIntValue(out rangeStart, "Inceputul intervalului:");
+    var rangeStartString = ReadValue("Inceputul intervalului:");
 
-    var ok2 = ReadIntValue(out rangeEnd, "Sfarsitul intervalului:");
+    var rangeEndString = ReadValue("Sfarsitul intervalului:");
 
-    if (rangeStart >= rangeEnd || ok1 == false || ok2 == false)
+    if (!int.TryParse(rangeStartString, out rangeStart)
+       || !int.TryParse(rangeEndString, out rangeEnd)
+       || !ValidateRangeLimitValues(rangeStart, rangeEnd))
     {
         isRangeValid = false;
         Console.WriteLine("Interval introdus gresit! Incearca din nou.");
     }
 } while (isRangeValid == false);
 
-Random r = new Random();
-int nr = new();
-nr = r.Next(rangeStart, rangeEnd);
 
-bool guess = false;
+
+Random random = new Random();
+int randomNumber = random.Next(rangeStart, rangeEnd);
+
+
+
+var isGuessed = false;
 do
 {
-    string u = Console.ReadLine();
-    int user;
-    var usr=Int32.TryParse(u, out user);
+    var userValueString = ReadValue("Introduceti valoarea:");
 
-    if (usr == false)
+    if (!Int32.TryParse(userValueString, out userValue))
     {
-        Console.WriteLine("Valoarea " + u + " este caracter!");
-        continue;
+        Console.WriteLine("Valoarea " + userValueString + " este caracter!");
     }
     else
-    if (user > rangeEnd || user < rangeStart && usr==false)
-        Console.WriteLine("Valoarea "+user+" nu se afla in interval!");
-    else
-        if (nr == user)
+    {
+        if (!isInRange(userValue))
         {
-            guess = true;
-            Console.WriteLine("Valoarea " + user + " este corect!");
+            Console.WriteLine("Valoarea " + userValue + " nu se afla in interval!");
         }
         else
-            if (user > nr)
-                Console.WriteLine("Valoarea " + user + " este prea mare!");
+        {
+            if (ValidateEquality(randomNumber, userValue))
+            {
+                isGuessed = true;
+                Console.WriteLine("Valoarea " + userValue + " este corecta!");
+                
+            }
             else
-                Console.WriteLine("Valoarea " + user + " este prea mic!");
-} while (guess == false);
+            {
+                if (ValidateInequality(randomNumber))
+                {
+                    Console.WriteLine("Valoarea " + userValue + " este prea mare!");
+                }
+                else
+                {
+                    Console.WriteLine("Valoarea " + userValue + " este prea mica!");
+                }
+            }
+        }
+    }
+} while (!isGuessed);
