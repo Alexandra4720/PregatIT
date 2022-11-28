@@ -1,11 +1,9 @@
-﻿int rangeStart;
-int rangeEnd = 0;
+﻿using GuessTheNumber;
+
 int userValue;
 
-static bool ValidateRangeLimitValues(int rangeStart, int rangeEnd)
-{
-    return rangeStart <= rangeEnd;
-}
+RangeLimitsReader rangeLimitsReader= new();
+
 
 string ReadValue(string valueDescription)
 {
@@ -18,9 +16,10 @@ static bool ValidateEquality(int randomNumber, int userValue)
     return randomNumber == userValue;
 }
 
-bool isInRange(int userValue)
+bool IsInRange(int userValue)
 {
-    return (userValue <= rangeEnd) && (userValue >= rangeStart);
+    return (userValue <= rangeLimitsReader.GetRangeEnd()) 
+        && (userValue >= rangeLimitsReader.GetRangeStart());
 }
 
 bool ValidateInequality(int randomNumber)
@@ -28,30 +27,8 @@ bool ValidateInequality(int randomNumber)
     return userValue > randomNumber;
 }
 
-
-
-bool isRangeValid;
-do
-{
-    isRangeValid = true;
-
-    var rangeStartString = ReadValue("Inceputul intervalului:");
-
-    var rangeEndString = ReadValue("Sfarsitul intervalului:");
-
-    if (!int.TryParse(rangeStartString, out rangeStart)
-       || !int.TryParse(rangeEndString, out rangeEnd)
-       || !ValidateRangeLimitValues(rangeStart, rangeEnd))
-    {
-        isRangeValid = false;
-        Console.WriteLine("Interval introdus gresit! Incearca din nou.");
-    }
-} while (isRangeValid == false);
-
-
-
 Random random = new Random();
-int randomNumber = random.Next(rangeStart, rangeEnd);
+int randomNumber = random.Next(rangeLimitsReader.GetRangeStart(), rangeLimitsReader.GetRangeEnd());
 
 
 
@@ -66,7 +43,7 @@ do
     }
     else
     {
-        if (!isInRange(userValue))
+        if (!IsInRange(userValue))
         {
             Console.WriteLine("Valoarea " + userValue + " nu se afla in interval!");
         }
@@ -76,7 +53,8 @@ do
             {
                 isGuessed = true;
                 Console.WriteLine("Valoarea " + userValue + " este corecta!");
-                
+                Console.ReadLine();
+
             }
             else
             {
@@ -92,3 +70,4 @@ do
         }
     }
 } while (!isGuessed);
+
