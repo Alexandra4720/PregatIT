@@ -1,7 +1,13 @@
-﻿int rangeStart;
+﻿using GuessTheNumber;
+
+int rangeStart;
 int rangeEnd = 0;
 int userValue;
 
+
+
+
+// Easier to understand the entire logic if in first place is the code that calls the main logic, and at the bottom the methods that are called
 static bool ValidateRangeLimitValues(int rangeStart, int rangeEnd)
 {
     return rangeStart <= rangeEnd;
@@ -31,6 +37,7 @@ bool ValidateInequality(int randomNumber)
 
 
 bool isRangeValid;
+// The following while block worths to be extracted in another method
 do
 {
     isRangeValid = true;
@@ -56,16 +63,19 @@ int randomNumber = random.Next(rangeStart, rangeEnd);
 
 
 var isGuessed = false;
+// The following while block worths to be extracted in another method
 do
 {
     var userValueString = ReadValue("Introduceti valoarea:");
 
     if (!Int32.TryParse(userValueString, out userValue))
     {
+        // Message could be improved
         Console.WriteLine("Valoarea " + userValueString + " este caracter!");
     }
     else
     {
+        // Nice validation case
         if (!isInRange(userValue))
         {
             Console.WriteLine("Valoarea " + userValue + " nu se afla in interval!");
