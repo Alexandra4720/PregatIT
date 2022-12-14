@@ -1,6 +1,10 @@
-﻿int inc;
+﻿// variable names could be improved
+int inc;
 int fin;
 bool ok,ok1,ok2;
+
+// nice to cover these validations
+// the do while block is hard to understand what it does on a first look
 do
 {
     ok = true;
@@ -19,12 +23,14 @@ do
     }
 } while (ok == false);
 
+// a bit hard to understand what it does on a first look
 Random r = new Random();
 int nr = new();
 nr = r.Next(inc, fin);
 //Console.WriteLine(nr);
 
 bool guess = false;
+// the do while block is hard to understand what it does on a first look
 do
 {
     string u = Console.ReadLine();
